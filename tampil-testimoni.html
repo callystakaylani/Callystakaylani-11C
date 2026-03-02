@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Usaha Buku</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">Beranda</a>
+        <a href="produk.html">Produk</a>
+        <a href="bedah-buku.html">Bedah buku</a>
+        <a href="testimoni.html">Testimoni</a>
+        <a href="tampil-testimoni.html">Testimoni Pembeli</a>
+        <a href="kontak.html">kontak</a>
+        <a href="event.html">event</a>
+    </nav>
+
+    <main class="formulir">
+        <h2>Testimoni-testimoni pembeli :</h2>
+
+        <div id="daftarTestimoni"></div>
+        <button id="hapusSemua">Hapus Semua Testimoni</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Neurova Bookstore</p>
+    </footer>
+
+    <script>
+        const container = document.getElementById('daftarTestimoni');
+        const testimoniList = JSON.parse(localStorage.getItem('testimoniList')) || [];
+
+        if(testimoniList.length === 0) {
+            container.innerHTML = "<p>Belum ada testimoni.</p>";
+        } else {
+            testimoniList.forEach((t) => {
+                const el = document.createElement('div');
+                el.className = 'testimoni-box';
+                el.innerHTML = `
+                <p><strong>Nama:</strong> ${t.nama}</p>
+                <p><strong>Email:</strong> ${t.email}</p>
+                <p><strong>Pesan:</strong> ${t.testimoni}</p>`;
+                container.appendChild(el);
+            });
+        }
+
+        document.getElementById("hapusSemua").addEventListener("click", function(){
+            if(confirm("Apakah Anda yakin ingin menghapus semua testimoni?")){
+                localStorage.removeItem("testimoniList");
+                location.reload();
+            }
+        });
+    </script>
+
+    <script>
+        const form = document.getElementById('formTestimoni');
+
+        if(form){
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const nama = document.getElementById('nama').value;
+                const asal = document.getElementById('asal').value;
+                const email = document.getElementById('email').value;
+                const judul = document.getElementById('judul').value;
+                const rating = document.getElementById('rating').value;
+                const testimoni = document.getElementById('pesan').value;
+
+                const dataBaru = {nama, asal, email, judul, rating, testimoni};
+
+                const list = JSON.parse(localStorage.getItem('testimoniList')) || [];
+                list.push(dataBaru);
+
+                localStorage.setItem('testimoniList', JSON.stringify(list));
+
+                window.location.href = 'tampil-testimoni.html';
+            });
+        }
+    </script>
+
+</body>
+</html>
